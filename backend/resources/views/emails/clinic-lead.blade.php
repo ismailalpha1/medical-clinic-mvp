@@ -1,9 +1,9 @@
 @php
     $locale = ($locale ?? 'en') === 'es' ? 'es' : 'en';
     $copy = $locale === 'es' ? [
-        'preheader' => 'Nueva inscripción de clínica de',
-        'businessLead' => 'Nueva oportunidad comercial',
-        'heading' => 'Inscripción de clínica recibida',
+        'preheader' => 'Nueva consulta de automatización de',
+        'businessLead' => 'Nueva oportunidad de automatización',
+        'heading' => 'Consulta de automatización clínica recibida',
         'intro' => 'Una clínica ha compartido su información a través del sitio web de CarePoint.',
         'clinicOverview' => 'Resumen de la clínica',
         'clinicType' => 'Tipo de clínica',
@@ -23,13 +23,13 @@
         'noDescription' => 'No se proporcionó una descripción.',
         'businessGoals' => 'Objetivos del negocio',
         'noGoals' => 'No se indicaron objetivos.',
-        'footer' => 'Notificación de registro de clínica de CarePoint',
+        'footer' => 'Notificación de automatización clínica de CarePoint',
         'submissionId' => 'ID de envío',
         'automated' => 'Esta es una notificación automática del sitio web de CarePoint.',
     ] : [
-        'preheader' => 'New clinic registration from',
-        'businessLead' => 'New business lead',
-        'heading' => 'Clinic registration received',
+        'preheader' => 'New clinic automation inquiry from',
+        'businessLead' => 'New automation opportunity',
+        'heading' => 'Clinic automation inquiry received',
         'intro' => 'A clinic has shared its information through the CarePoint website.',
         'clinicOverview' => 'Clinic overview',
         'clinicType' => 'Clinic type',
@@ -49,7 +49,7 @@
         'noDescription' => 'No description provided.',
         'businessGoals' => 'Business goals',
         'noGoals' => 'No goals provided.',
-        'footer' => 'CarePoint clinic registration notification',
+        'footer' => 'CarePoint clinic automation inquiry',
         'submissionId' => 'Submission ID',
         'automated' => 'This is an automated notification sent from the CarePoint website.',
     ];
@@ -75,12 +75,22 @@
         'other' => 'Other',
     ];
     $goalLabels = $locale === 'es' ? [
+        'automate_appointments' => 'Programación de citas y recordatorios',
+        'patient_coordination' => 'Coordinación y comunicación con pacientes',
+        'postoperative_follow_up' => 'Seguimiento posoperatorio',
+        'reduce_admin_work' => 'Reducir la carga administrativa',
+        'connect_clinic_tools' => 'Conectar las herramientas actuales de la clínica',
         'improve_online_visibility' => 'Mejorar la visibilidad en línea',
         'receive_more_patient_inquiries' => 'Recibir más consultas de pacientes',
         'promote_clinic_services' => 'Promocionar los servicios de la clínica',
         'build_new_website' => 'Crear un sitio web nuevo',
         'other' => 'Otro',
     ] : [
+        'automate_appointments' => 'Appointment scheduling and reminders',
+        'patient_coordination' => 'Patient coordination and communications',
+        'postoperative_follow_up' => 'Post-operative follow-up',
+        'reduce_admin_work' => 'Reduce administrative workload',
+        'connect_clinic_tools' => 'Connect existing clinic tools',
         'improve_online_visibility' => 'Improve online visibility',
         'receive_more_patient_inquiries' => 'Receive more patient inquiries',
         'promote_clinic_services' => 'Promote clinic services',

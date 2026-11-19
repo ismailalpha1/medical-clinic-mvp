@@ -130,7 +130,7 @@ function Layout() {
         <div className="container footer-inner">
           <div><Link className="brand brand-light" to="/">CarePoint<span>+</span></Link><p>{t('home.footerTagline')}</p></div>
           <div className="footer-links"><Link to="/about">{t('nav.about')}</Link><Link to="/services">{t('nav.services')}</Link><Link to="/contact">{t('nav.contact')}</Link></div>
-          <small>© {new Date().getFullYear()} CarePoint Medical. {t('home.demoFooter')}</small>
+          <small>© {new Date().getFullYear()} CarePoint. {t('home.demoFooter')}</small>
         </div>
       </footer>
       <ChatbotWidget />

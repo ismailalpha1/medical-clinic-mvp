@@ -32,10 +32,11 @@ export default function ClinicRegistrationWizard() {
     ['other', t('common.other')],
   ]
   const goalOptions = [
-    ['improve_online_visibility', t('form.goalVisibility')],
-    ['receive_more_patient_inquiries', t('form.goalInquiries')],
-    ['promote_clinic_services', t('form.goalPromote')],
-    ['build_new_website', t('form.goalWebsite')],
+    ['automate_appointments', t('form.goalAppointments')],
+    ['patient_coordination', t('form.goalCoordination')],
+    ['postoperative_follow_up', t('form.goalPostOp')],
+    ['reduce_admin_work', t('form.goalAdmin')],
+    ['connect_clinic_tools', t('form.goalIntegrations')],
     ['other', t('common.other')],
   ]
 

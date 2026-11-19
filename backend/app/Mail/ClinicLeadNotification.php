@@ -16,8 +16,8 @@ class ClinicLeadNotification extends Mailable
     public function build(): self
     {
         $subject = $this->emailLocale === 'es'
-            ? 'Nueva inscripción de clínica: '
-            : 'New clinic registration: ';
+            ? 'Nueva consulta de automatización clínica: '
+            : 'New clinic automation inquiry: ';
 
         return $this->subject($subject.$this->submission->clinic_name)
             ->replyTo($this->submission->email, $this->submission->contact_person)
