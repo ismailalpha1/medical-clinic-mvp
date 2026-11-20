@@ -78,6 +78,7 @@ class GoogleCalendarService
             'appointment' => $isSpanish ? 'Solicitud de cita' : 'Appointment request',
             'services' => $isSpanish ? 'Consulta sobre servicios' : 'Services inquiry',
             'location' => $isSpanish ? 'Consulta sobre ubicación' : 'Location inquiry',
+            'website_software' => $isSpanish ? 'Consulta sobre sitio web o software' : 'Website or software inquiry',
             'callback' => $isSpanish ? 'Solicitud de llamada' : 'Call-back request',
             'other' => $isSpanish ? 'Otra consulta' : 'Other inquiry',
         ];

@@ -9,14 +9,18 @@
         'clinicType' => 'Tipo de clínica',
         'location' => 'Ubicación',
         'address' => 'Dirección',
+        'postalCode' => 'Código postal',
         'website' => 'Sitio web',
         'notProvided' => 'No indicado',
-        'doctors' => 'Médicos',
+        'peopleWorking' => 'Personas que trabajan en la clínica',
         'locations' => 'Centros',
         'established' => 'Año de fundación',
         'specialties' => 'Especialidades',
         'primaryContact' => 'Contacto principal',
         'contactMethod' => 'Método de contacto preferido',
+        'preferredLanguage' => 'Idioma preferido',
+        'english' => 'Inglés',
+        'spanish' => 'Español',
         'servicesGoals' => 'Servicios y objetivos',
         'noServiceDetails' => 'No se proporcionaron detalles de los servicios.',
         'aboutClinic' => 'Sobre la clínica',
@@ -35,14 +39,18 @@
         'clinicType' => 'Clinic type',
         'location' => 'Location',
         'address' => 'Address',
+        'postalCode' => 'Postal code',
         'website' => 'Website',
         'notProvided' => 'Not provided',
-        'doctors' => 'Doctors',
+        'peopleWorking' => 'People working at the clinic',
         'locations' => 'Locations',
         'established' => 'Established',
         'specialties' => 'Specialties',
         'primaryContact' => 'Primary contact',
         'contactMethod' => 'Preferred contact',
+        'preferredLanguage' => 'Preferred language',
+        'english' => 'English',
+        'spanish' => 'Spanish',
         'servicesGoals' => 'Services and goals',
         'noServiceDetails' => 'No service details provided.',
         'aboutClinic' => 'About the clinic',
@@ -114,6 +122,9 @@
         ];
         $preferredContact = $preferredContactLabels[$preferredContact] ?? $preferredContact;
     }
+    $preferredLanguage = $submission->preferred_language === 'es'
+        ? $copy['spanish']
+        : $copy['english'];
 @endphp
 <!doctype html>
 <html lang="{{ $locale }}">
@@ -177,7 +188,7 @@
                                 <tr>
                                     <td class="detail-column" width="50%" valign="top" style="padding:0 12px 16px 0;">
                                         <p style="margin:0 0 5px;color:#829196;font-size:11px;font-weight:bold;text-transform:uppercase;">{{ $copy['address'] }}</p>
-                                        <p style="margin:0;color:#344e55;font-size:14px;line-height:1.5;">{{ $submission->address ?: $copy['notProvided'] }}</p>
+                                        <p style="margin:0;color:#344e55;font-size:14px;line-height:1.5;">{{ $submission->address ?: $copy['notProvided'] }}@if ($submission->postal_code), {{ $copy['postalCode'] }}: {{ $submission->postal_code }}@endif</p>
                                     </td>
                                     <td class="detail-column" width="50%" valign="top" style="padding:0 0 16px 12px;">
                                         <p style="margin:0 0 5px;color:#829196;font-size:11px;font-weight:bold;text-transform:uppercase;">{{ $copy['website'] }}</p>
@@ -190,7 +201,7 @@
                                 </tr>
                                 <tr>
                                     <td class="detail-column" width="50%" valign="top" style="padding:0 12px 16px 0;">
-                                        <p style="margin:0 0 5px;color:#829196;font-size:11px;font-weight:bold;text-transform:uppercase;">{{ $copy['doctors'] }}</p>
+                                        <p style="margin:0 0 5px;color:#829196;font-size:11px;font-weight:bold;text-transform:uppercase;">{{ $copy['peopleWorking'] }}</p>
                                         <p style="margin:0;color:#344e55;font-size:14px;line-height:1.5;">{{ $submission->number_of_doctors ?: $copy['notProvided'] }}</p>
                                     </td>
                                     <td class="detail-column" width="50%" valign="top" style="padding:0 0 16px 12px;">
@@ -224,6 +235,9 @@
                             </p>
                             <p style="margin:0;color:#52666c;font-size:14px;line-height:1.6;">
                                 {{ $submission->phone }} <span style="color:#a1b0b3;">&nbsp;|&nbsp;</span> {{ $copy['contactMethod'] }}: {{ $preferredContact }}
+                            </p>
+                            <p style="margin:8px 0 0;color:#52666c;font-size:14px;line-height:1.6;">
+                                {{ $copy['preferredLanguage'] }}: {{ $preferredLanguage }}
                             </p>
                         </td>
                     </tr>

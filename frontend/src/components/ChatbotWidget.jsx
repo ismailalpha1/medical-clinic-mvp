@@ -54,13 +54,12 @@ export default function ChatbotWidget() {
   const [consent, setConsent] = useState(false)
   const [status, setStatus] = useState({ loading: false, error: '', success: false })
   const [availability, setAvailability] = useState({ loading: false, error: '', slots: [], timezone: '', durationMinutes: 0 })
-  const [appointmentResult, setAppointmentResult] = useState(null)
   const availabilityRequestId = useRef(0)
 
   const needOptions = [
     ['appointment', t('chatbot.needAppointment')],
     ['services', t('chatbot.needServices')],
-    ['location', t('chatbot.needLocation')],
+    ['website_software', t('chatbot.needLocation')],
     ['callback', t('chatbot.needCallback')],
     ['other', t('chatbot.needOther')],
   ]
@@ -255,7 +254,6 @@ export default function ChatbotWidget() {
     setValue('')
     setConsent(false)
     setAvailability({ loading: false, error: '', slots: [], timezone: '', durationMinutes: 0 })
-    setAppointmentResult(null)
     setStatus({ loading: false, error: '', success: false })
   }
 
@@ -279,7 +277,7 @@ export default function ChatbotWidget() {
     setStatus({ loading: true, error: '', success: false })
     try {
       if (answers.bookAppointment) {
-        const result = await postJson('/appointments', {
+        await postJson('/appointments', {
           name: answers.name,
           email,
           phone,
@@ -292,7 +290,6 @@ export default function ChatbotWidget() {
           consent: true,
           locale,
         })
-        setAppointmentResult(result.appointment)
       } else {
         await postJson('/contact-inquiries', {
           name: answers.name,
@@ -453,12 +450,7 @@ export default function ChatbotWidget() {
                 <span className="chatbot-success-mark" aria-hidden="true">✓</span>
                 <strong>{t('chatbot.successTitle')}</strong>
                 <p>{answers.bookAppointment ? t('chatbot.bookingSuccessMessage') : t('chatbot.inquirySuccessMessage')}</p>
-                {appointmentResult?.meet_link && (
-                  <a className="button chatbot-meet-link" href={appointmentResult.meet_link} target="_blank" rel="noreferrer">
-                    {t('chatbot.meetLink')}
-                  </a>
-                )}
-                <button type="button" className="text-link" onClick={restart}>{t('chatbot.restart')}</button>
+                <button type="button" className="button chatbot-restart" onClick={restart}>{t('chatbot.restart')}</button>
               </div>
             )}
 

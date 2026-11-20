@@ -2,24 +2,33 @@ import { useState } from 'react'
 import { postJson } from '../lib/api'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import LocationFields from './LocationFields'
 
 const initial = {
   clinic_name: '', contact_person: '', email: '', phone: '', website: '',
-  country: '', city: '', address: '', clinic_type: '', specialties: [],
+  country: '', city: '', postal_code: '', address: '', clinic_type: '', specialties: [],
   services: '', number_of_doctors: '', number_of_locations: '1',
   year_established: '', description: '', goals: [],
-  preferred_contact_method: 'Email', consent: false,
+  preferred_contact_method: 'Email', preferred_language: 'en', consent: false,
 }
 
 export default function LeadForm() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
-  const [form, setForm] = useState(initial)
+  const [form, setForm] = useState(() => ({
+    ...initial,
+    preferred_language: i18n.language.startsWith('es') ? 'es' : 'en',
+  }))
   const [status, setStatus] = useState({ loading: false, message: '', errors: {}, error: false })
 
   function update(event) {
     const { name, value, type, checked } = event.target
     setForm(current => ({ ...current, [name]: type === 'checkbox' ? checked : value }))
+  }
+
+  function updateCountry(event) {
+    const { value } = event.target
+    setForm(current => ({ ...current, country: value, city: '' }))
   }
 
   function updateMulti(event) {
@@ -87,8 +96,9 @@ export default function LeadForm() {
         <Field label={t('form.clinicTypeField')} name="clinic_type" value={form.clinic_type} onChange={update} error={fieldError('clinic_type')} required placeholder={t('form.clinicTypePlaceholder')} />
         <Field label={t('form.websiteField')} name="website" type="url" value={form.website} onChange={update} error={fieldError('website')} placeholder="https://example.com" />
         <Field label={t('form.yearField')} name="year_established" type="number" value={form.year_established} onChange={update} error={fieldError('year_established')} placeholder={t('form.yearPlaceholder')} />
-        <Field label={t('form.countryField')} name="country" value={form.country} onChange={update} error={fieldError('country')} required />
-        <Field label={t('form.cityField')} name="city" value={form.city} onChange={update} error={fieldError('city')} required />
+      </div>
+      <LocationFields form={form} onChange={update} onCountryChange={updateCountry} fieldError={fieldError} />
+      <div className="form-grid">
         <Field label={t('form.addressField')} name="address" value={form.address} onChange={update} error={fieldError('address')} />
         <Field label={t('form.doctorsField')} name="number_of_doctors" value={form.number_of_doctors} onChange={update} placeholder={t('form.doctorsPlaceholder')} />
         <Field label={t('form.locationsField')} name="number_of_locations" value={form.number_of_locations} onChange={update} placeholder={t('form.locationsPlaceholder')} />
@@ -109,6 +119,7 @@ export default function LeadForm() {
         <Field label={t('form.businessEmailField')} name="email" type="email" value={form.email} onChange={update} error={fieldError('email')} required />
         <Field label={t('form.phoneField')} name="phone" type="tel" value={form.phone} onChange={update} error={fieldError('phone')} required />
         <label className="field"><span>{t('form.preferredMethod')}</span><select name="preferred_contact_method" value={form.preferred_contact_method} onChange={update}><option value="Email">{t('common.email')}</option><option value="Phone">{t('common.phone')}</option><option value="WhatsApp">WhatsApp</option></select></label>
+        <label className="field"><span>{t('form.preferredLanguage')}</span><select name="preferred_language" value={form.preferred_language} onChange={update} required><option value="en">{t('form.languageEnglish')}</option><option value="es">{t('form.languageSpanish')}</option></select></label>
       </div>
 
       <fieldset>

@@ -29,6 +29,7 @@ class AppointmentBookingTest extends TestCase
                 'appointment' => 30,
                 'services' => 15,
                 'location' => 15,
+                'website_software' => 15,
                 'callback' => 15,
                 'other' => 30,
             ],
@@ -69,6 +70,28 @@ class AppointmentBookingTest extends TestCase
         $this->assertCount(4, $response->json('slots'));
         $this->assertSame('09:00', $response->json('slots.0.time'));
         $this->assertSame('10:00', $response->json('slots.1.time'));
+    }
+
+    public function test_website_software_requests_can_book_a_meeting(): void
+    {
+        $date = CarbonImmutable::now('UTC')->addDays(1)->toDateString();
+        Http::fake(function (Request $request) {
+            if ($request->url() === 'https://oauth2.googleapis.com/token') {
+                return Http::response(['access_token' => 'calendar-access-token'], 200);
+            }
+
+            if (str_contains($request->url(), '/freeBusy')) {
+                return Http::response([
+                    'calendars' => ['clinic@example.test' => ['busy' => []]],
+                ], 200);
+            }
+
+            return Http::response([], 404);
+        });
+
+        $this->getJson('/api/appointments/availability?date='.$date.'&need=website_software')
+            ->assertOk()
+            ->assertJsonPath('duration_minutes', 15);
     }
 
     public function test_booking_creates_a_calendar_event_without_adding_visit_reason_to_event(): void

@@ -21,7 +21,7 @@ class AppointmentController extends Controller
     {
         $validated = $request->validate([
             'date' => ['required', 'date_format:Y-m-d'],
-            'need' => ['required', 'string', Rule::in(['appointment', 'services', 'location', 'callback', 'other'])],
+            'need' => ['required', 'string', Rule::in(['appointment', 'services', 'location', 'website_software', 'callback', 'other'])],
         ]);
 
         try {
@@ -39,7 +39,7 @@ class AppointmentController extends Controller
             'name' => ['required', 'string', 'max:160'],
             'email' => ['required_without:phone', 'nullable', 'email', 'max:180'],
             'phone' => ['required_without:email', 'nullable', 'string', 'max:40'],
-            'need' => ['required', 'string', Rule::in(['appointment', 'services', 'location', 'callback', 'other'])],
+            'need' => ['required', 'string', Rule::in(['appointment', 'services', 'location', 'website_software', 'callback', 'other'])],
             'meeting_type' => ['required', 'string', Rule::in(['clinic', 'google_meet'])],
             'location' => ['required_if:meeting_type,clinic', 'nullable', 'string', 'max:180'],
             'start_at' => ['required', 'date'],
@@ -75,6 +75,7 @@ class AppointmentController extends Controller
             'appointment' => $isSpanish ? 'Solicitud de cita' : 'Appointment request',
             'services' => $isSpanish ? 'Consulta sobre servicios' : 'Services inquiry',
             'location' => $isSpanish ? 'Consulta sobre ubicación' : 'Location inquiry',
+            'website_software' => $isSpanish ? 'Consulta sobre sitio web o software' : 'Website or software inquiry',
             'callback' => $isSpanish ? 'Solicitud de llamada' : 'Call-back request',
             'other' => $isSpanish ? 'Otra consulta' : 'Other inquiry',
         ];

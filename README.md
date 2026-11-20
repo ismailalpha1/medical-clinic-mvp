@@ -6,6 +6,7 @@ A lead-generation website built with React + Vite, Laravel API, and MySQL.
 - Home page with Banner, About preview, Services preview, and Contact CTA
 - Dedicated About, Services, Contact, and Clinic Registration pages
 - Clinic business registration form with client-side and server-side validation
+- Country and country-specific city dropdowns powered by the CountriesNow API, plus postal code and preferred-language fields
 - Persists clinic submissions in MySQL
 - Sends a notification email to a configured recipient
 - Contact inquiry endpoint and database table

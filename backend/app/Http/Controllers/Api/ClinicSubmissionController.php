@@ -23,6 +23,7 @@ class ClinicSubmissionController extends Controller
             'website' => ['nullable', 'url', 'max:255'],
             'country' => ['required', 'string', 'max:100'],
             'city' => ['required', 'string', 'max:100'],
+            'postal_code' => ['nullable', 'string', 'max:20'],
             'address' => ['nullable', 'string', 'max:255'],
             'clinic_type' => ['required', 'string', 'max:120'],
             'specialties' => ['nullable', 'array', 'max:20'],
@@ -35,6 +36,7 @@ class ClinicSubmissionController extends Controller
             'goals' => ['nullable', 'array', 'max:15'],
             'goals.*' => ['string', 'max:120'],
             'preferred_contact_method' => ['required', Rule::in(['Email', 'Phone', 'WhatsApp'])],
+            'preferred_language' => ['required', Rule::in(['en', 'es'])],
             'consent' => ['required', 'accepted'],
             'locale' => ['sometimes', 'string', Rule::in(['en', 'es'])],
         ]);

@@ -2,19 +2,23 @@ import { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { postJson } from '../lib/api'
+import LocationFields from '../components/LocationFields'
 
 const initial = {
   clinic_name: '', clinic_type: '', website: '', year_established: '',
-  country: '', city: '', address: '', number_of_doctors: '',
+  country: '', city: '', postal_code: '', address: '', number_of_doctors: '',
   number_of_locations: '1', services: '', description: '', specialties: [],
-  contact_person: '', email: '', phone: '', preferred_contact_method: 'Email',
+  contact_person: '', email: '', phone: '', preferred_contact_method: 'Email', preferred_language: 'en',
   goals: [], consent: false,
 }
 
 export default function ClinicRegistrationWizard() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
-  const [form, setForm] = useState(initial)
+  const [form, setForm] = useState(() => ({
+    ...initial,
+    preferred_language: i18n.language.startsWith('es') ? 'es' : 'en',
+  }))
   const [slide, setSlide] = useState(0)
   const [status, setStatus] = useState({ loading: false, message: '', errors: {}, error: false })
   const touchStart = useRef(null)
@@ -47,7 +51,7 @@ export default function ClinicRegistrationWizard() {
     },
     {
       title: t('wizard.locationTitle'),
-      fields: ['country', 'city', 'address', 'number_of_doctors'],
+      fields: ['location_fields', 'address', 'number_of_doctors'],
     },
     {
       title: t('wizard.servicesTitle'),
@@ -55,7 +59,7 @@ export default function ClinicRegistrationWizard() {
     },
     {
       title: t('wizard.contactTitle'),
-      fields: ['contact_person', 'email', 'phone', 'preferred_contact_method'],
+      fields: ['contact_person', 'email', 'phone', 'preferred_contact_method', 'preferred_language'],
     },
     {
       title: t('wizard.goalsTitle'),
@@ -66,6 +70,11 @@ export default function ClinicRegistrationWizard() {
   function update(event) {
     const { name, value, type, checked } = event.target
     setForm(current => ({ ...current, [name]: type === 'checkbox' ? checked : value }))
+  }
+
+  function updateCountry(event) {
+    const { value } = event.target
+    setForm(current => ({ ...current, country: value, city: '' }))
   }
 
   function updateMulti(event) {
@@ -135,8 +144,16 @@ export default function ClinicRegistrationWizard() {
     if (name === 'clinic_type') return <WizardField name={name} label={t('form.clinicTypeField')} form={form} onChange={update} error={fieldError(name)} placeholder={t('form.clinicTypePlaceholder')} required />
     if (name === 'website') return <WizardField name={name} label={t('form.websiteField')} form={form} onChange={update} error={fieldError(name)} type="url" placeholder="https://example.com" />
     if (name === 'year_established') return <WizardField name={name} label={t('form.yearField')} form={form} onChange={update} error={fieldError(name)} type="number" placeholder={t('form.yearPlaceholder')} />
-    if (name === 'country') return <WizardField name={name} label={t('form.countryField')} form={form} onChange={update} error={fieldError(name)} required />
-    if (name === 'city') return <WizardField name={name} label={t('form.cityField')} form={form} onChange={update} error={fieldError(name)} required />
+    if (name === 'location_fields') return (
+      <LocationFields
+        key={name}
+        form={form}
+        onChange={update}
+        onCountryChange={updateCountry}
+        fieldError={fieldError}
+        className="wizard-grid location-fields"
+      />
+    )
     if (name === 'address') return <WizardField name={name} label={t('form.addressField')} form={form} onChange={update} error={fieldError(name)} />
     if (name === 'number_of_doctors') return <WizardField name={name} label={t('form.doctorsField')} form={form} onChange={update} error={fieldError(name)} placeholder={t('form.doctorsPlaceholder')} />
     if (name === 'number_of_locations') return <WizardField name={name} label={t('form.locationsField')} form={form} onChange={update} error={fieldError(name)} placeholder={t('form.locationsPlaceholder')} />
@@ -159,6 +176,9 @@ export default function ClinicRegistrationWizard() {
     if (name === 'phone') return <WizardField name={name} label={t('form.phoneField')} form={form} onChange={update} error={fieldError(name)} type="tel" required />
     if (name === 'preferred_contact_method') return (
       <label className="field wizard-question"><span>{t('form.preferredMethod')}</span><select name={name} value={form[name]} onChange={update}><option value="Email">{t('common.email')}</option><option value="Phone">{t('common.phone')}</option><option value="WhatsApp">WhatsApp</option></select></label>
+    )
+    if (name === 'preferred_language') return (
+      <label className="field wizard-question"><span>{t('form.preferredLanguage')}</span><select name={name} value={form[name]} onChange={update} required><option value="en">{t('form.languageEnglish')}</option><option value="es">{t('form.languageSpanish')}</option></select></label>
     )
     if (name === 'goals') return (
       <fieldset className="wizard-question wizard-options">
@@ -184,6 +204,7 @@ export default function ClinicRegistrationWizard() {
         <span>{form.email || t('wizard.notProvided')}</span>
         <span>{form.phone || t('wizard.notProvided')}</span>
         <span>{form.preferred_contact_method}</span>
+        <span>{form.preferred_language === 'es' ? t('form.languageSpanish') : t('form.languageEnglish')}</span>
       </div>
     )
     return null
@@ -200,7 +221,7 @@ export default function ClinicRegistrationWizard() {
       </div>
 
       <form ref={formRef} className="wizard-card" onSubmit={submit} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onKeyDown={event => {
-        if (event.target.tagName === 'TEXTAREA' || event.target.tagName === 'INPUT') return
+        if (['TEXTAREA', 'INPUT', 'SELECT'].includes(event.target.tagName)) return
         if (event.key === 'ArrowRight') next()
         if (event.key === 'ArrowLeft') back()
       }}>
@@ -216,7 +237,9 @@ export default function ClinicRegistrationWizard() {
           <span className="wizard-count">{slide + 1} / {slides.length}</span>
           <h2>{slides[slide].title}</h2>
           <div className="wizard-grid">
-            {slides[slide].fields.map(name => <div key={name}>{renderQuestion(name)}</div>)}
+            {slides[slide].fields.map(name => name === 'location_fields'
+              ? renderQuestion(name)
+              : <div key={name}>{renderQuestion(name)}</div>)}
           </div>
         </div>
 

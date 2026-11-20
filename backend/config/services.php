@@ -50,6 +50,7 @@ return [
             'appointment' => (int) env('APPOINTMENT_DURATION_APPOINTMENT', 30),
             'services' => (int) env('APPOINTMENT_DURATION_SERVICES', 15),
             'location' => (int) env('APPOINTMENT_DURATION_LOCATION', 15),
+            'website_software' => (int) env('APPOINTMENT_DURATION_WEBSITE_SOFTWARE', env('APPOINTMENT_DURATION_LOCATION', 15)),
             'callback' => (int) env('APPOINTMENT_DURATION_CALLBACK', 15),
             'other' => (int) env('APPOINTMENT_DURATION_OTHER', 30),
         ],
