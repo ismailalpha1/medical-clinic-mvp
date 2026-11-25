@@ -11,7 +11,7 @@ class ClinicSubmission extends Model
         'country', 'city', 'postal_code', 'address', 'clinic_type', 'specialties',
         'services', 'number_of_doctors', 'number_of_locations',
         'year_established', 'description', 'goals',
-        'preferred_contact_method', 'preferred_language', 'consent',
+        'preferred_contact_method', 'preferred_language', 'consent', 'status',
     ];
 
     protected function casts(): array

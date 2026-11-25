@@ -18,7 +18,7 @@ A lead-generation website built with React + Vite, Laravel API, and MySQL.
 
 ## Requirements
 - Node.js 20+
-- PHP 8.2+
+- PHP 8.3+
 - Composer 2
 - MySQL 8+
 - A mail provider / SMTP credentials for email notifications
@@ -67,10 +67,27 @@ Use your actual SMTP provider values. Do not commit real credentials.
 ```bash
 cd backend
 php artisan key:generate
-php artisan migrate
+php artisan migrate --seed
 php artisan serve
 ```
 API base URL: `http://127.0.0.1:8000/api`
+
+## Admin panel
+
+The bilingual admin panel is available at `http://127.0.0.1:8000/admin/login`. Its responsive left sidebar links to the dashboard, status-filtered clinic submissions, contact inquiries, and admin accounts (where permitted). A theme control switches between light and dark mode and remembers the selection. The dashboard summarizes six-month submission and inquiry trends, monthly averages, submission statuses, conversion rates, and top submission countries.
+
+Clinic submission statuses are pending, accepted, refused, or meeting. Super admins can change a submission's status from its details page; admins can view the status but cannot change it. Submission and contact inquiry lists can be exported as UTF-8 CSV files that open in Excel. When updating an existing deployment, run `php artisan migrate` to add the submission status field.
+
+After configuring the database and running migrations/seeds, create the initial super-admin interactively:
+
+```bash
+cd backend
+php artisan admin:create-super-admin
+```
+
+The command prompts for the account name, email, and a password of at least 12 characters containing uppercase, lowercase, and numeric characters. No default admin credentials are created. Super admins can manage clinic submissions, contact inquiries, and admin accounts; admins can view, add, and edit submissions and inquiries, but cannot delete records, manage admin accounts, or change submission statuses. Both roles can use the English and Spanish interface.
+
+Keep `SESSION_DRIVER=database` in production and use HTTPS so admin authentication and CSRF-protected requests use secure sessions. The first super admin is created directly by the Artisan command; subsequent admin accounts are managed in the panel.
 
 ## 4. Run frontend
 In another terminal:
@@ -158,7 +175,7 @@ The form collects business contact details, clinic location/type, specialties, s
 - Use HTTPS and secure SMTP credentials.
 - Configure exact frontend origin in `FRONTEND_URL` and review CORS.
 - Add rate limiting, spam protection (e.g. CAPTCHA), and abuse monitoring.
-- Add authentication/authorization before creating any admin dashboard or exposing submissions.
+- Keep the `/admin` panel behind its role permissions; create the initial super admin with `php artisan admin:create-super-admin` and protect production sessions with HTTPS.
 - Add privacy notice, retention policy, and consent wording reviewed for applicable laws.
 - Consider queueing mail (`ShouldQueue`) and monitoring failed jobs for production.
 - Add automated tests, logging, backups, and deployment health checks.
